@@ -1,0 +1,171 @@
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // --- ELEMEN UTAMA ---
+    const sidebar = document.getElementById('sidebar');
+    const pageTitle = document.getElementById('pageTitle');
+    
+    // --- HALAMAN (VIEWS) ---
+    const welcomePage = document.getElementById('welcomePage');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const dashboardPage = document.getElementById('dashboardPage');
+    const generatorPage = document.getElementById('generatorPage');
+    const profilePage = document.getElementById('profilePage');
+    
+    // --- TOMBOL & LINK ---
+    const showLoginBtn = document.getElementById('showLogin');
+    const showRegisterBtn = document.getElementById('showRegister');
+    const linkToRegister = document.getElementById('linkToRegister');
+    const linkToLogin = document.getElementById('linkToLogin');
+    const menuHome = document.getElementById('menuHome');
+    const menuGenerator = document.getElementById('menuGenerator');
+    const menuProfile = document.getElementById('menuProfile');
+    const menuLogout = document.getElementById('menuLogout');
+    const goToGeneratorBtn = document.getElementById('goToGeneratorBtn');
+    
+    // --- FORM & OUTPUT ---
+    const loginUserForm = document.getElementById('loginUserForm');
+    const registerUserForm = document.getElementById('registerUserForm');
+    const dashboardWelcomeMessage = document.getElementById('dashboardWelcomeMessage');
+    const generatorFrame = document.getElementById('generatorFrame');
+    const loginMessage = document.getElementById('loginMessage');
+    const registerMessage = document.getElementById('registerMessage');
+    const profileTrialStatus = document.getElementById('profileTrialStatus');
+
+    // --- DATA ---
+    let currentUser = null;
+
+    // --- FUNGSI-FUNGSI HELPER ---
+    function showPage(pageElement, title) {
+      const allPages = [welcomePage, loginForm, registerForm, dashboardPage, generatorPage, profilePage];
+      allPages.forEach(page => { if(page) page.classList.add('hidden'); });
+      if (pageElement) {
+        pageElement.classList.remove('hidden');
+        pageTitle.textContent = title;
+      }
+    }
+
+    function updateMessage(element, message, type) {
+        if (!element) return;
+        element.textContent = message;
+        element.className = `message ${type}`;
+        element.style.display = 'block';
+        setTimeout(() => { if (element) { element.style.display = 'none'; element.textContent = ''; } }, 5000);
+    }
+    
+    function updateProfileAndTrialStatus() {
+        if (!currentUser || !profileTrialStatus) return;
+        if (currentUser.subscriptionStatus === 'Trial') {
+            const clicksLeft = MAX_CLICKS_FROM_SERVER - currentUser.trialClicks;
+            if (clicksLeft > 0) {
+              profileTrialStatus.innerHTML = `<strong>Penggunaan Trial:</strong> ${currentUser.trialClicks} / ${MAX_CLICKS_FROM_SERVER}. Sisa ${clicksLeft} kali.`;
+            } else {
+              profileTrialStatus.innerHTML = `<strong>Penggunaan Trial:</strong> Masa trial Anda telah habis. Silakan hubungi admin untuk upgrade.`;
+            }
+        } else {
+            profileTrialStatus.textContent = 'Anda adalah pengguna Premium.';
+        }
+    }
+
+    // --- FUNGSI UTAMA ---
+    function loadDashboardData() {
+        if (!currentUser) return;
+        console.log("Memuat data dasbor...");
+        dashboardWelcomeMessage.textContent = `Selamat datang, ${currentUser.fullName}!`;
+        google.script.run
+            .withSuccessHandler(response => {
+                if (response.success) {
+                    console.log("Data dasbor berhasil dimuat:", response.stats);
+                    const stats = response.stats;
+                    document.getElementById('stat-visitors-today').textContent = stats.visitorsToday;
+                    document.getElementById('stat-rpp-today').textContent = stats.rppToday;
+                    document.getElementById('stat-signups-today').textContent = stats.signupsToday;
+                    document.getElementById('stat-trial-users').textContent = stats.trialUsers;
+                } else {
+                    console.error("Server mengembalikan error saat memuat dasbor:", response.message);
+                }
+            })
+            .withFailureHandler(error => {
+                console.error("Gagal total memanggil getDashboardStats:", error);
+            })
+            .getDashboardStats();
+    }
+
+    function openGenerator() {
+      if (!currentUser) return;
+      console.log("Mencoba membuka generator...");
+      if (currentUser.subscriptionStatus === 'Trial' && currentUser.trialClicks >= MAX_CLICKS_FROM_SERVER) {
+        alert('Masa trial Anda telah habis. Silakan hubungi admin untuk upgrade.');
+        showPage(profilePage, 'Profil Pengguna');
+        return;
+      }
+      console.log("Mencatat penggunaan trial...");
+      google.script.run
+        .withSuccessHandler((trialResponse) => {
+          if (trialResponse.success) {
+            console.log("Penggunaan trial berhasil dicatat. Membuka iframe...");
+            currentUser.trialClicks = trialResponse.newClicks;
+            localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+            updateProfileAndTrialStatus();
+            
+            // MODIFIKASI: Menggunakan URL Wikipedia untuk pengujian.
+            // Setelah situs eksternal Anda diperbaiki, ganti kembali ke URL asli.
+            generatorFrame.src = 'https://id.wikipedia.org/wiki/Rencana_pelaksanaan_pembelajaran';
+
+            showPage(generatorPage, 'Generator RPP'); 
+          } else { 
+            console.error("Server mengembalikan error saat mencatat trial:", trialResponse.message);
+            alert(trialResponse.message); 
+          }
+        })
+        .withFailureHandler(error => {
+            console.error("Gagal total memanggil recordTrialClick:", error);
+            alert("Terjadi kesalahan teknis saat mencoba membuka generator.");
+        })
+        .recordTrialClick(currentUser.id);
+    }
+
+    // --- EVENT LISTENERS ---
+    if (showLoginBtn) showLoginBtn.addEventListener('click', () => showPage(loginForm, 'Login Pengguna'));
+    if (showRegisterBtn) showRegisterBtn.addEventListener('click', () => showPage(registerForm, 'Daftar Pengguna Baru'));
+    if (linkToLogin) linkToLogin.addEventListener('click', (e) => { e.preventDefault(); showPage(loginForm, 'Login Pengguna'); });
+    if (linkToRegister) linkToRegister.addEventListener('click', (e) => { e.preventDefault(); showPage(registerForm, 'Daftar Pengguna Baru'); });
+
+    if (loginUserForm) loginUserForm.addEventListener('submit', (e) => { /* ... logika sama ... */ });
+    if (registerUserForm) registerUserForm.addEventListener('submit', (e) => { /* ... logika sama ... */ });
+    
+    // Menu Sidebar
+    if (menuHome) menuHome.addEventListener('click', (e) => { e.preventDefault(); if(currentUser) { showPage(dashboardPage, 'Dasbor'); loadDashboardData(); } });
+    if (menuGenerator) menuGenerator.addEventListener('click', (e) => { e.preventDefault(); openGenerator(); });
+    if (goToGeneratorBtn) goToGeneratorBtn.addEventListener('click', openGenerator);
+    if (menuProfile) menuProfile.addEventListener('click', (e) => { 
+        e.preventDefault(); 
+        if(currentUser) {
+            updateProfileAndTrialStatus();
+            showPage(profilePage, 'Profil Pengguna');
+        } 
+    });
+    if (menuLogout) menuLogout.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentUser = null;
+        localStorage.removeItem('loggedInUser');
+        sidebar.classList.add('fully-hidden');
+        showPage(welcomePage, 'Selamat Datang');
+    });
+
+    // --- LOGIKA AWAL SAAT HALAMAN DIMUAT ---
+    const storedUser = localStorage.getItem('loggedInUser');
+    if (storedUser) {
+      console.log("Pengguna ditemukan di local storage. Memulai sesi...");
+      currentUser = JSON.parse(storedUser);
+      sidebar.classList.remove('fully-hidden');
+      updateProfileAndTrialStatus();
+      showPage(dashboardPage, 'Dasbor'); 
+      loadDashboardData();
+    } else {
+      console.log("Tidak ada pengguna di local storage. Menampilkan halaman selamat datang.");
+      sidebar.classList.add('fully-hidden');
+      showPage(welcomePage, 'Selamat Datang');
+    }
+  });
+</script>

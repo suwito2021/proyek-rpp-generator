@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('Stylesheet'); ?>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar disembunyikan secara default dengan kelas 'fully-hidden' -->
+      <div class="sidebar fully-hidden" id="sidebar">
+        <div class="sidebar-header">
+          <img src="https://via.placeholder.com/40" alt="Logo" class="sidebar-logo"> <h3>RPP Generator</h3>
+        </div>
+        <ul class="sidebar-menu">
+          <li><a href="#" id="menuHome"><i class="fas fa-home"></i> Dasbor</a></li>
+          <li><a href="#" id="menuGenerator"><i class="fas fa-pencil-alt"></i> Generator RPP</a></li>
+          <li><a href="#" id="menuProfile"><i class="fas fa-user-circle"></i> Profil</a></li>
+          <li><a href="#" id="menuLogout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </div>
+
+      <div class="main-content" id="mainContent">
+        <div class="header">
+          <!-- Hamburger menu bisa kita sembunyikan jika sidebar hanya muncul setelah login -->
+          <button class="hamburger-menu" id="hamburgerMenu" style="display: none;">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 id="pageTitle">Selamat Datang</h1>
+        </div>
+
+        <div class="content-area" id="contentArea">
+          <!-- Halaman Selamat Datang (sebelum login) -->
+          <div id="welcomePage" class="page-section">
+            <h2>Selamat Datang di RPP Generator!</h2>
+            <p>Aplikasi cerdas untuk membantu Anda membuat Rencana Pelaksanaan Pembelajaran dengan cepat dan mudah.</p>
+            <p>Silakan login atau daftar untuk memulai.</p>
+            <div class="button-group">
+              <button class="btn btn-primary" id="showLogin">Login</button>
+              <button class="btn btn-secondary" id="showRegister">Daftar</button>
+            </div>
+          </div>
+          
+          <!-- Halaman Login -->
+          <div id="loginForm" class="page-section hidden">
+            <h2>Login Pengguna</h2>
+            <form id="loginUserForm">
+              <div class="form-group"><label for="loginEmail">Email:</label><input type="email" id="loginEmail" required></div>
+              <div class="form-group"><label for="loginPassword">Password:</label><input type="password" id="loginPassword" required></div>
+              <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <p id="loginMessage" class="message"></p>
+            <p>Belum punya akun? <a href="#" id="linkToRegister">Daftar di sini</a></p>
+          </div>
+
+          <!-- Halaman Register -->
+          <div id="registerForm" class="page-section hidden">
+            <h2>Daftar Pengguna Baru</h2>
+            <form id="registerUserForm">
+                <div class="form-group"><label for="registerFullName">Nama Lengkap:</label><input type="text" id="registerFullName" required></div>
+                <div class="form-group"><label for="registerEmail">Email:</label><input type="email" id="registerEmail" required></div>
+                <div class="form-group"><label for="registerPassword">Password:</label><input type="password" id="registerPassword" required></div>
+                <button type="submit" class="btn btn-primary">Daftar</button>
+            </form>
+            <p id="registerMessage" class="message"></p>
+            <p>Sudah punya akun? <a href="#" id="linkToLogin">Login di sini</a></p>
+          </div>
+
+          <!-- Halaman Dasbor (setelah login) -->
+          <div id="dashboardPage" class="page-section hidden">
+            <h2 id="dashboardWelcomeMessage"></h2>
+            <p>Berikut adalah statistik aktivitas aplikasi Anda hari ini.</p>
+            <div class="stats-container">
+              <div class="stat-card"><h3><span id="stat-visitors-today">...</span></h3><p>Pengunjung Hari Ini</p></div>
+              <div class="stat-card"><h3><span id="stat-rpp-today">...</span></h3><p>RPP Dibuat Hari Ini</p></div>
+              <div class="stat-card"><h3><span id="stat-signups-today">...</span></h3><p>Pendaftar Baru Hari Ini</p></div>
+              <div class="stat-card"><h3><span id="stat-trial-users">...</span></h3><p>Total Pengguna Trial</p></div>
+            </div>
+            <div class="quick-actions">
+                <p>Siap untuk memulai?</p>
+                <button class="btn btn-primary" id="goToGeneratorBtn"><i class="fas fa-pencil-alt"></i> Buat RPP Baru</button>
+            </div>
+          </div>
+
+          <!-- Halaman Generator (Iframe) -->
+          <div id="generatorPage" class="page-section hidden">
+            <iframe id="generatorFrame" style="width: 100%; height: 80vh; border: none;"></iframe>
+          </div>
+
+          <!-- Halaman Profil -->
+           <div id="profilePage" class="page-section hidden">
+            <h2>Profil Pengguna</h2>
+            <p><strong>Nama Lengkap:</strong> <span id="profileFullName"></span></p>
+            <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+            <p id="profileTrialStatus"></p> 
+            <p><strong>Status Langganan:</strong> <span id="profileSubscriptionStatus"></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      const MAX_CLICKS_FROM_SERVER = <?= MAX_TRIAL_CLICKS ?>;
+    </script>
+    <?!= include('JavaScript'); ?>
+  </body>
+</html>
