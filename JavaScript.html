@@ -108,9 +108,8 @@
             localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
             updateProfileAndTrialStatus();
             
-            // MODIFIKASI: Menggunakan URL Wikipedia untuk pengujian.
-            // Setelah situs eksternal Anda diperbaiki, ganti kembali ke URL asli.
-            generatorFrame.src = 'const generatorUrl = 'https://suwito2021.github.io/promptrppgen/';';
+            const webAppUrl = "https://script.google.com/macros/s/AKfycbyy02qQksJhvWAgDoRvH6AxxlzYiyyfQvskVKg0V_ACwQs1GF7e8DbtQkWnZg5Ds1FT/exec"; // Ganti dengan URL deployment Anda
+            generatorFrame.src = webAppUrl + "?page=generator";
 
             showPage(generatorPage, 'Generator RPP'); 
           } else { 
