@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Prompt RPP - Pendekatan Mendalam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .animate-fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl font-bold text-center mb-2">🎯 Generator Prompt RPP</h1>
+            <p class="text-center text-blue-100 text-lg">Pendekatan Mendalam untuk Rencana Pelaksanaan Pembelajaran</p>
+            <p class="text-center text-blue-100 text-lg">Didesain oleh: Suwito Setiadi- Pengawas Deli Serdang</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 py-8">
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Form Input -->
+            <div class="bg-white rounded-xl card-shadow p-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                    📝 Input Data RPP
+                </h2>
+                
+                <form id="rppForm" class="space-y-6">
+                    <!-- Identitas Mata Pelajaran -->
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800 mb-3">Identitas Mata Pelajaran</h3>
+                        <div class="space-y-4">
+                            <!-- Jenjang dan Mata Pelajaran -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jenjang Pendidikan</label>
+                                    <select id="jenjangPendidikan" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="">Pilih jenjang pendidikan</option>
+                                        <option value="SD">SD</option>
+                                        <option value="SMP">SMP</option>
+                                        <option value="SMA">SMA</option>
+                                        <option value="SMK">SMK</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
+                                    <input type="text" id="mataPelajaran" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Contoh: Matematika">
+                                    <select id="mataPelajaranDropdown" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent hidden">
+                                        <option value="">Pilih mata pelajaran SMP</option>
+                                        <option value="Pendidikan Agama dan Budi Pekerti">Pendidikan Agama dan Budi Pekerti</option>
+                                        <option value="Pendidikan Pancasila">Pendidikan Pancasila</option>
+                                        <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                                        <option value="Matematika">Matematika</option>
+                                        <option value="Ilmu Pengetahuan Alam (IPA)">Ilmu Pengetahuan Alam (IPA)</option>
+                                        <option value="Ilmu Pengetahuan Sosial (IPS)">Ilmu Pengetahuan Sosial (IPS)</option>
+                                        <option value="Bahasa Inggris">Bahasa Inggris</option>
+                                        <option value="Pendidikan Jasmani Olahraga dan Kesehatan (PJOK)">Pendidikan Jasmani Olahraga dan Kesehatan (PJOK)</option>
+                                        <option value="Seni Budaya">Seni Budaya</option>
+                                        <option value="Informatika">Informatika</option>
+                                        <option value="Prakarya">Prakarya</option>
+                                        <option value="Muatan Lokal">Muatan Lokal</option>
+                                    </select>
+                                    <select id="mataPelajaranDropdownSD" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent hidden">
+                                        <option value="">Pilih mata pelajaran SD</option>
+                                        <option value="Pendidikan Agama dan Budi Pekerti">Pendidikan Agama dan Budi Pekerti</option>
+                                        <option value="Pendidikan Pancasila">Pendidikan Pancasila</option>
+                                        <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                                        <option value="Matematika">Matematika</option>
+                                        <option value="IPAS">IPAS</option>
+                                        <option value="Bahasa Inggris">Bahasa Inggris</option>
+                                        <option value="Pendidikan Jasmani Olahraga dan Kesehatan (PJOK)">Pendidikan Jasmani Olahraga dan Kesehatan (PJOK)</option>
+                                        <option value="Seni Budaya">Seni Budaya</option>
+                                        <option value="Prakarya">Prakarya</option>
+                                        <option value="Muatan Lokal">Muatan Lokal</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Kelas/Semester dan Durasi -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Kelas/Semester</label>
+                                    <input type="text" id="kelasSemester" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Contoh: VII/1">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Durasi Pembelajaran</label>
+                                    <select id="durasiPembelajaran" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="">Pilih durasi</option>
+                                        <option value="1x30">1 x 30 menit</option>
+                                        <option value="2x30">2 x 30 menit</option>
+                                        <option value="3x30">3 x 30 menit</option>
+                                        <option value="1x40">1 x 40 menit</option>
+                                        <option value="2x40">2 x 40 menit</option>
+                                        <option value="3x40">3 x 40 menit</option>
+                                        <option value="4x40">4 x 40 menit</option>
+                                        <option value="1x45">1 x 45 menit</option>
+                                        <option value="2x45">2 x 45 menit</option>
+                                        <option value="3x45">3 x 45 menit</option>
+                                        <option value="4x45">4 x 45 menit</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Materi Pembelajaran -->
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-3">Materi Pembelajaran</h3>
+                        <div class="space-y-4">
+                            <!-- Materi Pelajaran dan Tingkat Kesulitan -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Materi Pelajaran</label>
+                                    <textarea id="subMateri" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Contoh: 1) Pengertian SPLDV, 2) Metode eliminasi, 3) Metode substitusi, 4) Aplikasi dalam kehidupan"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tingkat Kesulitan</label>
+                                    <select id="tingkatKesulitan" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                        <option value="">Pilih tingkat</option>
+                                        <option value="mudah">Mudah</option>
+                                        <option value="sedang">Sedang</option>
+                                        <option value="sulit">Sulit</option>
+                                        <option value="bertingkat">Bertingkat (mudah ke sulit)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Jenis Pengetahuan -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Pengetahuan yang Dicapai</label>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="faktual" class="mr-2 text-green-500">
+                                        <span class="text-sm">Pengetahuan Faktual</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="konseptual" class="mr-2 text-green-500">
+                                        <span class="text-sm">Pengetahuan Konseptual</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="prosedural" class="mr-2 text-green-500">
+                                        <span class="text-sm">Pengetahuan Prosedural</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="metakognitif" class="mr-2 text-green-500">
+                                        <span class="text-sm">Pengetahuan Metakognitif</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="aplikatif" class="mr-2 text-green-500">
+                                        <span class="text-sm">Pengetahuan Aplikatif</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="analitis" class="mr-2 text-green-500">
+                                        <span class="text-sm">Pengetahuan Analitis</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Relevansi Kehidupan Nyata -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Relevansi dengan Kehidupan Nyata Siswa</label>
+                                <textarea id="relevansiKehidupan" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Contoh: Penggunaan SPLDV dalam menghitung harga barang di toko, perencanaan keuangan keluarga, optimasi produksi usaha kecil"></textarea>
+                            </div>
+
+                            <!-- Konteks Lokal dan Budaya -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Konteks Lokal/Budaya</label>
+                                    <input type="text" id="konteksLokal" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Contoh: Budaya dagang di pasar tradisional">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Isu Kontemporer</label>
+                                    <input type="text" id="isuKontemporer" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Contoh: Ekonomi digital, startup">
+                                </div>
+                            </div>
+
+                            <!-- Integrasi Nilai dan Karakter -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Integrasi Nilai dan Karakter</label>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="religius" class="mr-2 text-green-500">
+                                        <span class="text-sm">Religius</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="nasionalis" class="mr-2 text-green-500">
+                                        <span class="text-sm">Nasionalis</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="mandiri" class="mr-2 text-green-500">
+                                        <span class="text-sm">Mandiri</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="gotongRoyong" class="mr-2 text-green-500">
+                                        <span class="text-sm">Gotong Royong</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="integritas" class="mr-2 text-green-500">
+                                        <span class="text-sm">Integritas</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="kreatif" class="mr-2 text-green-500">
+                                        <span class="text-sm">Kreatif</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="kritisLogis" class="mr-2 text-green-500">
+                                        <span class="text-sm">Kritis & Logis</span>
+                                    </label>
+                                    <label class="flex items-center bg-white p-2 rounded border">
+                                        <input type="checkbox" id="komunikatif" class="mr-2 text-green-500">
+                                        <span class="text-sm">Komunikatif</span>
+                                    </label>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Prasyarat dan Lanjutan -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Materi Prasyarat</label>
+                                    <textarea id="materiPrasyarat" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Contoh: Persamaan linear satu variabel, operasi aljabar"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Materi Lanjutan</label>
+                                    <textarea id="materiLanjutan" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Contoh: Sistem pertidaksamaan, program linear"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Capaian Pembelajaran dan Tujuan Pembelajaran -->
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-purple-800 mb-3">DESAIN PEMBELAJARAN</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Capaian Pembelajaran (CP)</label>
+                                <textarea id="capaianPembelajaran" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Contoh: Peserta didik dapat menyelesaikan masalah kontekstual yang berkaitan dengan sistem persamaan linear dua variabel"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Lintas Disiplin Ilmu</label>
+                                <textarea id="keterkaitan" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Contoh: IPS (ekonomi), Fisika (gerak), Kimia (stoikiometri), Prakarya (perhitungan bahan)"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tujuan Pembelajaran</label>
+                                <textarea id="tujuanPembelajaran" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Contoh: Setelah mengikuti pembelajaran, peserta didik dapat: 1) Mengidentifikasi SPLDV dari masalah kontekstual, 2) Menyelesaikan SPLDV dengan metode eliminasi dan substitusi"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Topik Pembelajaran</label>
+                                <input type="text" id="topikMateri" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Contoh: Sistem Persamaan Linear Dua Variabel">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Praktik Pedagogis</label>
+                                <select id="modelPembelajaran" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="">Pilih praktik pedagogis</option>
+                                    <option value="discovery-learning">Discovery Learning</option>
+                                    <option value="problem-based">Problem Based Learning</option>
+                                    <option value="project-based">Project Based Learning</option>
+                                    <option value="cooperative">Cooperative Learning</option>
+                                    <option value="inquiry">Inquiry Learning</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Kemitraan Pembelajaran</label>
+                                <select id="kemitraanPembelajaran" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="">Pilih kemitraan pembelajaran</option>
+                                    <option value="guru-bidang-studi-lain">Guru bidang studi lain</option>
+                                    <option value="peserta-didik-lain">Peserta didik lain</option>
+                                    <option value="orang-tua">Orang tua</option>
+                                    <option value="komunitas">Komunitas</option>
+                                    <option value="tokoh-masyarakat">Tokoh masyarakat</option>
+                                    <option value="dunia-usaha-industri">Dunia usaha dan dunia industri kerja</option>
+                                    <option value="institusi">Institusi</option>
+                                    <option value="mitra-profesional">Mitra profesional</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Lingkungan Pembelajaran</label>
+                                <select id="lingkunganPembelajaran" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="">Pilih Lingkungan pembelajaran</option>
+                                    <option value="lingkungan-sekolah">Lingkungan Sekolah</option>
+                                    <option value="learning-managemet-system-lms">Learning Management System (LMS)/option>
+                                    <option value="dukungan-guru">Dukungan Guru</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Pemanfaatan Digital</label>
+                                <select id="pemanfaatanDigital" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="">Pilih pemanfaatan digital</option>
+                                    <option value="perpustakaan-digital">Perpustakaan digital</option>
+                                    <option value="forum-diskusi-daring">Forum diskusi daring</option>
+                                    <option value="penilaian-daring">Penilaian daring</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Karakteristik Siswa -->
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-orange-800 mb-3">Karakteristik & Kesiapan Siswa</h3>
+                        <div class="space-y-4">
+                            <!-- Data Dasar -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Siswa</label>
+                                    <input type="number" id="jumlahSiswa" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="32">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tingkat Kemampuan Umum</label>
+                                    <select id="tingkatKemampuan" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                        <option value="">Pilih tingkat</option>
+                                        <option value="rendah">Rendah</option>
+                                        <option value="sedang">Sedang</option>
+                                        <option value="tinggi">Tinggi</option>
+                                        <option value="campuran">Campuran</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Pengetahuan Awal -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Pengetahuan Awal Siswa</label>
+                                <textarea id="pengetahuanAwal" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Contoh: Siswa sudah memahami konsep persamaan linear satu variabel, operasi aljabar dasar"></textarea>
+                            </div>
+
+                            <!-- Minat dan Motivasi -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Minat Belajar Dominan</label>
+                                    <select id="minatBelajar" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                        <option value="">Pilih minat</option>
+                                        <option value="visual">Visual (gambar, diagram)</option>
+                                        <option value="auditori">Auditori (mendengar, diskusi)</option>
+                                        <option value="kinestetik">Kinestetik (praktik, gerak)</option>
+                                        <option value="campuran">Campuran</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tingkat Motivasi</label>
+                                    <select id="tingkatMotivasi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                        <option value="">Pilih motivasi</option>
+                                        <option value="tinggi">Tinggi</option>
+                                        <option value="sedang">Sedang</option>
+                                        <option value="rendah">Rendah</option>
+                                        <option value="bervariasi">Bervariasi</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Latar Belakang -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Latar Belakang Sosial-Ekonomi</label>
+                                    <select id="latarBelakang" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                        <option value="">Pilih latar belakang</option>
+                                        <option value="menengah-atas">Menengah ke Atas</option>
+                                        <option value="menengah">Menengah</option>
+                                        <option value="menengah-bawah">Menengah ke Bawah</option>
+                                        <option value="beragam">Beragam</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Akses Teknologi</label>
+                                    <select id="aksesTeknologi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                        <option value="">Pilih akses</option>
+                                        <option value="baik">Baik (smartphone/laptop)</option>
+                                        <option value="terbatas">Terbatas</option>
+                                        <option value="minimal">Minimal</option>
+                                        <option value="beragam">Beragam</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Kebutuhan Khusus -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Kebutuhan Belajar Khusus</label>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" id="abk" class="mr-2 text-orange-500">
+                                        <span class="text-sm">Anak Berkebutuhan Khusus</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" id="gifted" class="mr-2 text-orange-500">
+                                        <span class="text-sm">Siswa Berbakat</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" id="remedial" class="mr-2 text-orange-500">
+                                        <span class="text-sm">Perlu Remedial</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" id="pengayaan" class="mr-2 text-orange-500">
+                                        <span class="text-sm">Perlu Pengayaan</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Gaya Belajar dan Preferensi -->
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Preferensi Kerja</label>
+                                    <select id="preferensiKerja" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                        <option value="">Pilih preferensi</option>
+                                        <option value="individu">Lebih suka kerja individu</option>
+                                        <option value="kelompok">Lebih suka kerja kelompok</option>
+                                        <option value="berpasangan">Lebih suka berpasangan</option>
+                                        <option value="fleksibel">Fleksibel</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Kemampuan Komunikasi</label>
+                                    <select id="kemampuanKomunikasi" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                        <option value="">Pilih kemampuan</option>
+                                        <option value="aktif">Aktif berkomunikasi</option>
+                                        <option value="sedang">Cukup aktif</option>
+                                        <option value="pasif">Cenderung pasif</option>
+                                        <option value="campuran">Campuran</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Catatan Tambahan -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Catatan Khusus Karakteristik Siswa</label>
+                                <textarea id="catatanKhusus" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Contoh: Beberapa siswa memiliki kesulitan dalam pemahaman konsep abstrak, perlu pendekatan konkret"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Tombol Generate -->
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                        🚀 Generate Prompt RPP Mendalam
+                    </button>
+                </form>
+            </div>
+
+            <!-- Output Area -->
+            <div class="bg-white rounded-xl card-shadow p-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                    ✨ Hasil Prompt RPP
+                </h2>
+                
+                <div id="outputArea" class="bg-gray-50 rounded-lg p-6 min-h-96">
+                    <div class="text-center text-gray-500 py-12">
+                        <div class="text-6xl mb-4">📋</div>
+                        <p class="text-lg">Prompt RPP akan muncul di sini setelah Anda mengisi form dan klik Generate</p>
+                        <p class="text-sm mt-2">Pastikan semua field penting sudah terisi dengan lengkap</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <button id="copyBtn" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 opacity-50 cursor-not-allowed" disabled>
+                        📋 Copy Prompt
+                    </button>
+                    <a href="https://gemini.google.com/" target="_blank" class="w-full block text-center bg-blue-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-600 transition-colors duration-200">
+                        🚀 Buka Gemini AI
+                    </a>
+                    <button id="clearBtn" class="w-full bg-red-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors duration-200">
+                        🗑️ Clear All
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="mt-12 bg-white rounded-xl card-shadow p-8">
+            <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                💡 Tips Menggunakan Generator Prompt RPP
+            </h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="text-2xl mb-2">🎯</div>
+                    <h4 class="font-semibold text-blue-800 mb-2">Spesifik & Jelas</h4>
+                    <p class="text-sm text-blue-700">Isi data dengan spesifik dan jelas untuk hasil prompt yang optimal</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <div class="text-2xl mb-2">📚</div>
+                    <h4 class="font-semibold text-green-800 mb-2">Sesuai Kurikulum</h4>
+                    <p class="text-sm text-green-700">Pastikan CP dan Tujuan Pembelajaran sesuai dengan kurikulum yang berlaku</p>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <div class="text-2xl mb-2">👥</div>
+                    <h4 class="font-semibold text-purple-800 mb-2">Karakteristik Siswa</h4>
+                    <p class="text-sm text-purple-700">Pertimbangkan kemampuan dan jumlah siswa untuk strategi yang tepat</p>
+                </div>
+                <div class="bg-orange-50 p-4 rounded-lg">
+                    <div class="text-2xl mb-2">⚡</div>
+                    <h4 class="font-semibold text-orange-800 mb-2">Model Pembelajaran</h4>
+                    <p class="text-sm text-orange-700">Pilih model yang sesuai dengan materi dan tujuan pembelajaran</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('rppForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generatePrompt();
+        });
+
+        // Handle jenjang pendidikan change to show/hide mata pelajaran dropdown
+        document.getElementById('jenjangPendidikan').addEventListener('change', function() {
+            const jenjang = this.value;
+            const inputField = document.getElementById('mataPelajaran');
+            const smpDropdownField = document.getElementById('mataPelajaranDropdown');
+            const sdDropdownField = document.getElementById('mataPelajaranDropdownSD');
+            
+            // Hide all fields first
+            inputField.classList.add('hidden');
+            smpDropdownField.classList.add('hidden');
+            sdDropdownField.classList.add('hidden');
+            
+            // Clear all fields
+            inputField.value = '';
+            smpDropdownField.value = '';
+            sdDropdownField.value = '';
+            
+            if (jenjang === 'SMP') {
+                smpDropdownField.classList.remove('hidden');
+            } else if (jenjang === 'SD') {
+                sdDropdownField.classList.remove('hidden');
+            } else {
+                inputField.classList.remove('hidden');
+            }
+        });
+
+        function generatePrompt() {
+            // Get form values
+            const jenjangPendidikan = document.getElementById('jenjangPendidikan').value;
+            let mataPelajaran = '';
+            if (jenjangPendidikan === 'SMP') {
+                mataPelajaran = document.getElementById('mataPelajaranDropdown').value;
+            } else if (jenjangPendidikan === 'SD') {
+                mataPelajaran = document.getElementById('mataPelajaranDropdownSD').value;
+            } else {
+                mataPelajaran = document.getElementById('mataPelajaran').value;
+            }
+            const kelasSemester = document.getElementById('kelasSemester').value;
+            const topikMateri = document.getElementById('topikMateri').value;
+            const subMateri = document.getElementById('subMateri').value;
+            const capaianPembelajaran = document.getElementById('capaianPembelajaran').value;
+            const tujuanPembelajaran = document.getElementById('tujuanPembelajaran').value;
+            const jumlahSiswa = document.getElementById('jumlahSiswa').value;
+            const tingkatKemampuan = document.getElementById('tingkatKemampuan').value;
+            const modelPembelajaran = document.getElementById('modelPembelajaran').value;
+            const kemitraanPembelajaran = document.getElementById('kemitraanPembelajaran').value;
+            const pemanfaatanDigital = document.getElementById('pemanfaatanDigital').value;
+            const durasiPembelajaran = document.getElementById('durasiPembelajaran').value;
+            
+            // Get learning material characteristics
+            const tingkatKesulitan = document.getElementById('tingkatKesulitan').value;
+            const relevansiKehidupan = document.getElementById('relevansiKehidupan').value;
+            const konteksLokal = document.getElementById('konteksLokal').value;
+            const isuKontemporer = document.getElementById('isuKontemporer').value;
+            const keterkaitan = document.getElementById('keterkaitan').value;
+            const materiPrasyarat = document.getElementById('materiPrasyarat').value;
+            const materiLanjutan = document.getElementById('materiLanjutan').value;
+            
+            // Get knowledge types
+            const faktual = document.getElementById('faktual').checked;
+            const konseptual = document.getElementById('konseptual').checked;
+            const prosedural = document.getElementById('prosedural').checked;
+            const metakognitif = document.getElementById('metakognitif').checked;
+            const aplikatif = document.getElementById('aplikatif').checked;
+            const analitis = document.getElementById('analitis').checked;
+            
+            // Build knowledge types array
+            const jenisPengetahuan = [];
+            if (faktual) jenisPengetahuan.push('Faktual');
+            if (konseptual) jenisPengetahuan.push('Konseptual');
+            if (prosedural) jenisPengetahuan.push('Prosedural');
+            if (metakognitif) jenisPengetahuan.push('Metakognitif');
+            if (aplikatif) jenisPengetahuan.push('Aplikatif');
+            if (analitis) jenisPengetahuan.push('Analitis');
+            
+            // Get character values
+            const religius = document.getElementById('religius').checked;
+            const nasionalis = document.getElementById('nasionalis').checked;
+            const mandiri = document.getElementById('mandiri').checked;
+            const gotongRoyong = document.getElementById('gotongRoyong').checked;
+            const integritas = document.getElementById('integritas').checked;
+            const kreatif = document.getElementById('kreatif').checked;
+            const kritisLogis = document.getElementById('kritisLogis').checked;
+            const komunikatif = document.getElementById('komunikatif').checked;
+            
+            // Build character values array
+            const nilaiKarakter = [];
+            if (religius) nilaiKarakter.push('Religius');
+            if (nasionalis) nilaiKarakter.push('Nasionalis');
+            if (mandiri) nilaiKarakter.push('Mandiri');
+            if (gotongRoyong) nilaiKarakter.push('Gotong Royong');
+            if (integritas) nilaiKarakter.push('Integritas');
+            if (kreatif) nilaiKarakter.push('Kreatif');
+            if (kritisLogis) nilaiKarakter.push('Kritis & Logis');
+            if (komunikatif) nilaiKarakter.push('Komunikatif');
+            
+            // Get student characteristics
+            const pengetahuanAwal = document.getElementById('pengetahuanAwal').value;
+            const minatBelajar = document.getElementById('minatBelajar').value;
+            const tingkatMotivasi = document.getElementById('tingkatMotivasi').value;
+            const latarBelakang = document.getElementById('latarBelakang').value;
+            const aksesTeknologi = document.getElementById('aksesTeknologi').value;
+            const preferensiKerja = document.getElementById('preferensiKerja').value;
+            const kemampuanKomunikasi = document.getElementById('kemampuanKomunikasi').value;
+            const catatanKhusus = document.getElementById('catatanKhusus').value;
+            
+            // Get special needs checkboxes
+            const abk = document.getElementById('abk').checked;
+            const gifted = document.getElementById('gifted').checked;
+            const remedial = document.getElementById('remedial').checked;
+            const pengayaan = document.getElementById('pengayaan').checked;
+            
+            // Build special needs array
+            const kebutuhanKhusus = [];
+            if (abk) kebutuhanKhusus.push('Anak Berkebutuhan Khusus');
+            if (gifted) kebutuhanKhusus.push('Siswa Berbakat');
+            if (remedial) kebutuhanKhusus.push('Perlu Remedial');
+            if (pengayaan) kebutuhanKhusus.push('Perlu Pengayaan');
+
+            // Validate required fields
+            if (!mataPelajaran || !topikMateri) {
+                alert('Mohon isi minimal Mata Pelajaran dan Topik Materi');
+                return;
+            }
+
+            // Generate comprehensive prompt
+            const prompt = `
+PROMPT GENERATOR RPP - PENDEKATAN MENDALAM
+
+Buatkan Rencana Pelaksanaan Pembelajaran (RPP) yang komprehensif dan mendalam dengan spesifikasi berikut:
+
+═══════════════════════════════════════════════════════════════
+
+📚 IDENTITAS PEMBELAJARAN
+• Jenjang Pendidikan: ${jenjangPendidikan || 'Tentukan jenjang pendidikan yang sesuai'}
+• Mata Pelajaran: ${mataPelajaran}
+• Kelas/Semester: ${kelasSemester || 'Sesuaikan dengan konteks'}
+• Topik/Materi Pokok: ${topikMateri}
+• Sub Materi & Struktur: ${subMateri || 'Kembangkan sub-topik yang relevan'}
+• Durasi: ${durasiPembelajaran || 'Sesuaikan dengan kebutuhan'}
+
+📖 KARAKTERISTIK MATERI PEMBELAJARAN
+• Tingkat Kesulitan: ${tingkatKesulitan || 'Analisis tingkat kesulitan materi'}
+• Jenis Pengetahuan: ${jenisPengetahuan.length > 0 ? jenisPengetahuan.join(', ') : 'Identifikasi jenis pengetahuan yang akan dicapai'}
+• Relevansi Kehidupan Nyata: ${relevansiKehidupan || 'Kaitkan dengan kehidupan sehari-hari siswa'}
+• Konteks Lokal/Budaya: ${konteksLokal || 'Integrasikan konteks lokal dan budaya'}
+• Isu Kontemporer: ${isuKontemporer || 'Hubungkan dengan isu terkini'}
+• Keterkaitan Lintas Mapel: ${keterkaitan || 'Identifikasi keterkaitan dengan mata pelajaran lain'}
+• Materi Prasyarat: ${materiPrasyarat || 'Tentukan pengetahuan prasyarat yang diperlukan'}
+• Materi Lanjutan: ${materiLanjutan || 'Identifikasi materi lanjutan yang akan dipelajari'}
+• Integrasi Nilai Karakter: ${nilaiKarakter.length > 0 ? nilaiKarakter.join(', ') : 'Integrasikan nilai-nilai karakter yang relevan'}
+
+🎯 CAPAIAN PEMBELAJARAN DAN TUJUAN
+• Capaian Pembelajaran (CP): ${capaianPembelajaran || 'Tentukan capaian pembelajaran yang diharapkan'}
+• Tujuan Pembelajaran: ${tujuanPembelajaran || 'Rumuskan tujuan pembelajaran yang spesifik dan terukur'}
+
+👥 KARAKTERISTIK & KESIAPAN SISWA
+• Jumlah Siswa: ${jumlahSiswa || 'Sesuaikan dengan kondisi kelas'}
+• Tingkat Kemampuan Umum: ${tingkatKemampuan || 'Analisis kemampuan siswa'}
+• Pengetahuan Awal: ${pengetahuanAwal || 'Identifikasi pengetahuan prasyarat yang sudah dikuasai'}
+• Minat Belajar Dominan: ${minatBelajar || 'Analisis gaya belajar siswa'}
+• Tingkat Motivasi: ${tingkatMotivasi || 'Evaluasi motivasi belajar siswa'}
+• Latar Belakang Sosial-Ekonomi: ${latarBelakang || 'Pertimbangkan kondisi sosial-ekonomi'}
+• Akses Teknologi: ${aksesTeknologi || 'Evaluasi ketersediaan teknologi siswa'}
+• Preferensi Kerja: ${preferensiKerja || 'Identifikasi preferensi belajar individual/kelompok'}
+• Kemampuan Komunikasi: ${kemampuanKomunikasi || 'Analisis kemampuan komunikasi siswa'}
+• Kebutuhan Khusus: ${kebutuhanKhusus.length > 0 ? kebutuhanKhusus.join(', ') : 'Tidak ada kebutuhan khusus'}
+• Catatan Tambahan: ${catatanKhusus || 'Tidak ada catatan khusus'}
+
+🔬 PRAKTIK PEDAGOGIS
+• Praktik Pedagogis: ${modelPembelajaran || 'Pilih praktik pedagogis yang sesuai dengan materi'}
+• Kemitraan Pembelajaran: ${kemitraanPembelajaran || 'Tentukan kemitraan pembelajaran yang relevan'}
+• Lingkungan Pembelajaran: ${lingkunganPembelajaran || 'Tentukan lingkungan pembelajaran yang relevan'}
+• Pemanfaatan Digital: ${pemanfaatanDigital || 'Tentukan pemanfaatan teknologi digital yang sesuai'}
+
+═══════════════════════════════════════════════════════════════
+
+INSTRUKSI PEMBUATAN RPP:
+
+1. 🏗️ STRUKTUR RPP LENGKAP
+   Buatkan RPP dengan komponen lengkap meliputi:
+   - Identitas sekolah dan guru
+   - Identifikasi (Tuliskan tentang Identifikasi Peserta Didik sebelum belajar, seperti pengetahuan awal, minat, latar belakang, dan kebutuhan belajar, serta aspek lainnya)
+   - Indikator Pencapaian Kompetensi
+   - Tujuan Pembelajaran (SMART)
+   - Materi Pembelajaran (konsep, prosedur, metakognitif)
+   - Metode dan Model Pembelajaran
+   - Media dan Sumber Belajar
+   - Langkah-langkah Pembelajaran
+   - Penilaian (Sikap, Pengetahuan, Keterampilan)
+   - Remedial dan Pengayaan
+
+2. 📋 LANGKAH PEMBELAJARAN DETAIL
+   Rancang kegiatan pembelajaran dengan struktur:
+   
+   A. PENDAHULUAN (10-15% waktu dan Tuliskan prinsip pembelajaran yang digunakan, misal berkesadaran, bermakna, menggembirakan)
+   - Orientasi dan motivasi
+   - Apersepsi yang kontekstual
+   - Penyampaian tujuan dan cakupan materi
+   - Pembagian kelompok (jika diperlukan)
+
+   B. KEGIATAN INTI (70-80% waktu, Pada tahap ini, siswa aktif terlibat dalam pengalaman belajar memahami, mengaplikasi, dan merefleksi. Guru menerapkan prinsip pembelajaran berkesadaran, bermakna, menyenangkan untuk mencapai tujuan pembelajaran. Pengalaman belajar tidak harus dilaksanakan dalam satu kali pertemuan))
+        1. Memahami (Understanding)
+           -   Stimulation (Pemberian Rangsangan): Guru memulai dengan memantik rasa ingin tahu siswa melalui pertanyaan yang relevan dengan kehidupan mereka, cerita, atau demonstrasi menarik.
+
+                    Prinsip Berkesadaran: Siswa secara sadar diarahkan untuk memperhatikan dan merasakan keberadaan masalah atau fenomena baru. Mereka diajak untuk menggali apa yang sudah mereka ketahui.
+
+                    Prinsip Bermakna: Rangsangan dipilih agar relevan dengan konteks siswa, sehingga informasi yang diterima memiliki arti pribadi. Misalnya, membahas polusi air jika siswa tinggal di dekat sungai yang tercemar.
+
+                    Prinsip Menggembirakan: Rangsangan disajikan secara interaktif dan menyenangkan, mungkin dengan teka-teki, video pendek, atau kegiatan pembuka yang memicu antusiasme.
+            -  Problem Statement (Identifikasi Masalah)
+                 Siswa diajak untuk merumuskan pertanyaan kunci atau masalah yang ingin mereka pecahkan. Ini bisa dalam kelompok kecil atau individu.
+
+                    Prinsip Berkesadaran: Siswa secara sadar mengidentifikasi gap antara apa yang mereka ketahui dan apa yang perlu mereka pahami. Mereka menjadi lebih fokus pada tujuan pembelajaran.
+
+                    Prinsip Bermakna: Masalah yang dirumuskan adalah masalah nyata atau relevan, sehingga upaya untuk memecahkannya terasa penting bagi siswa.
+
+                    Prinsip Menggembirakan: Proses merumuskan masalah bisa dibuat seperti misi detektif atau tantangan, mendorong siswa untuk berpikir kritis dan kreatif dengan semangat.
+
+     2. Mengaplikasi (Application - Pada tahap Mengaplikasi, siswa secara aktif menggunakan pengetahuan dan keterampilan baru mereka dalam berbagai konteks untuk memecahkan masalah.)
+       - Data Collection (pengumpulan data)
+            Siswa aktif mencari dan mengumpulkan informasi yang dibutuhkan untuk menjawab masalah. Ini bisa melalui eksperimen, observasi, membaca, atau diskusi.
+
+            Prinsip Berkesadaran: Siswa secara sadar memilih metode pengumpulan data yang paling sesuai dan memahami mengapa data tertentu relevan.
+
+            Prinsip Bermakna: Data yang dikumpulkan secara langsung terkait dengan masalah yang ingin dipecahkan, membuat prosesnya terasa produktif dan memiliki tujuan.
+
+            Prinsip Menggembirakan: Kegiatan pengumpulan data bisa dirancang sebagai "ekspedisi" atau "penelitian lapangan" yang menyenangkan, memungkinkan siswa berinteraksi langsung dengan sumber informasi.
+        - Data Processing (pengolahan data,  Siswa menganalisis, menginterpretasi, dan mengorganisir data yang telah terkumpul. Ini melibatkan penalaran dan menemukan pola)
+            Prinsip Berkesadaran: Siswa sadar akan langkah-langkah dalam menganalisis data dan implikasinya. Mereka belajar untuk tidak hanya mengumpulkan data, tetapi juga mengolahnya secara sistematis.
+
+            Prinsip Bermakna: Proses pengolahan data menghasilkan pemahaman yang lebih dalam dan terstruktur, yang kemudian akan digunakan untuk mencapai tujuan pembelajaran.
+
+            Prinsip Menggembirakan: Kegiatan ini dapat diubah menjadi permainan atau tantangan di mana siswa berlomba menemukan pola atau menyusun data dengan cara yang paling efektif.
+        - Verification (pembuktian, Siswa menguji solusi atau hipotesis mereka berdasarkan data yang sudah diolah. Ini bisa berupa presentasi, simulasi, atau demonstrasi)
+            Prinsip Berkesadaran: Siswa secara sadar mengevaluasi apakah solusi mereka valid dan didukung oleh bukti. Mereka belajar dari keberhasilan maupun kegagalan.
+
+            Prinsip Bermakna: Pembuktian ini menunjukkan bahwa pengetahuan yang diperoleh dapat diterapkan untuk memecahkan masalah nyata, menegaskan relevansi pembelajaran.
+
+            Prinsip Menggembirakan: Tahap ini bisa menjadi momen "penemuan" atau "penyelesaian misi" yang memuaskan, di mana siswa melihat hasil dari kerja keras mereka.
+   3. Merefleksi (Reflection, tentang meninjau kembali perjalanan belajar, mengkonsolidasikan pemahaman, dan mengaitkannya dengan pengalaman yang lebih luas)
+     - Generalization (menarik kesimpulan, Siswa merumuskan kesimpulan umum atau prinsip dari seluruh pengalaman belajar. Mereka mengidentifikasi pelajaran penting yang bisa diambil)
+        Prinsip Berkesadaran: Siswa secara sadar memikirkan kembali keseluruhan proses, mengidentifikasi apa yang berhasil, apa yang menantang, dan pelajaran apa yang mereka peroleh.
+
+        Prinsip Bermakna: Kesimpulan yang ditarik tidak hanya berupa fakta, tetapi juga pemahaman mendalam yang dapat diterapkan dalam berbagai situasi, membuat pengetahuan tersebut lebih berdaya guna.
+
+        Prinsip Menggembirakan: Proses penarikan kesimpulan dapat dirayakan sebagai pencapaian. Siswa bisa berbagi "penemuan" mereka dengan bangga, memupuk rasa percaya diri dan kepuasan.
+
+   C. PENUTUP (10-15% waktu)
+   - Refleksi pembelajaran
+   - Kesimpulan bersama
+   - Evaluasi dan umpan balik
+   - Tindak lanjut dan preview materi selanjutnya
+
+3. 🎨 STRATEGI PEMBELAJARAN INOVATIF
+   - Integrasikan teknologi pembelajaran yang relevan
+   - Gunakan pendekatan saintifik (5M: Mengamati, Menanya, Mengumpulkan informasi, Mengasosiasi, Mengkomunikasikan)
+   - Terapkan pembelajaran berbasis masalah kontekstual
+   - Sertakan aktivitas kolaboratif dan diskusi
+   - Berikan ruang untuk kreativitas dan berpikir kritis
+
+4. 📊 SISTEM PENILAIAN HOLISTIK
+   Rancang penilaian yang mencakup:
+   - Penilaian Sikap: observasi, penilaian diri, penilaian antar teman
+   - Penilaian Pengetahuan: tes tertulis, lisan, penugasan
+   - Penilaian Keterampilan: praktik, produk, proyek, portofolio
+   - Rubrik penilaian yang jelas dan terukur
+   - Instrumen penilaian yang valid dan reliabel
+
+5. 🔧 DIFERENSIASI PEMBELAJARAN BERDASARKAN KARAKTERISTIK SISWA
+   - Analisis mendalam kesiapan belajar berdasarkan pengetahuan awal
+   - Strategi pembelajaran sesuai minat dan gaya belajar dominan
+   - Penyesuaian metode berdasarkan tingkat motivasi siswa
+   - Modifikasi konten, proses, dan produk pembelajaran
+   - Akomodasi khusus untuk siswa berkebutuhan khusus
+   - Program pengayaan untuk siswa berbakat/berkemampuan tinggi
+   - Program remedial untuk siswa yang membutuhkan bantuan tambahan
+   - Strategi komunikasi sesuai kemampuan komunikasi siswa
+   - Pemanfaatan teknologi sesuai akses yang tersedia
+   - Penyesuaian aktivitas berdasarkan preferensi kerja (individu/kelompok)
+
+6. 🌐 INTEGRASI NILAI DAN KARAKTER
+   - Penguatan Pendidikan Karakter (PPK)
+   - Nilai-nilai Pancasila dan Bhinneka Tunggal Ika
+   - Literasi dan numerasi
+   - Keterampilan abad 21 (4C: Critical thinking, Creativity, Collaboration, Communication)
+
+7. 📱 PEMANFAATAN TEKNOLOGI
+   - Media pembelajaran digital yang interaktif
+   - Platform pembelajaran online (jika diperlukan)
+   - Aplikasi pendukung pembelajaran
+   - Sumber belajar digital yang kredibel
+
+8. 🎯 ANALISIS KESIAPAN BELAJAR SISWA
+   - Lakukan asesmen diagnostik untuk mengidentifikasi pengetahuan awal
+   - Buat pemetaan kemampuan siswa berdasarkan hasil pre-test
+   - Identifikasi miskonsepsi yang mungkin ada pada siswa
+   - Analisis keterkaitan materi baru dengan pengetahuan sebelumnya
+   - Rancang strategi bridging untuk menghubungkan pengetahuan lama dan baru
+   - Siapkan materi prasyarat untuk siswa yang belum siap
+   - Buat rencana scaffolding yang bertahap dan terstruktur
+
+9. 📚 ANALISIS MENDALAM MATERI PEMBELAJARAN
+   - Lakukan analisis struktur materi dari sederhana ke kompleks
+   - Identifikasi hierarki konsep dan keterkaitan antar sub-materi
+   - Tentukan urutan pembelajaran yang logis dan sistematis
+   - Analisis tingkat kesulitan setiap bagian materi
+   - Siapkan strategi untuk mengatasi kesulitan belajar yang mungkin muncul
+   - Kembangkan contoh konkret dan abstrak sesuai jenis pengetahuan
+   - Rancang aktivitas yang mengintegrasikan berbagai jenis pengetahuan
+   - Buat koneksi eksplisit antara materi dengan kehidupan nyata siswa
+   - Integrasikan konteks lokal dan isu kontemporer secara bermakna
+   - Rancang pembelajaran lintas mata pelajaran yang autentik
+   - Susun strategi penguatan nilai karakter melalui materi pembelajaran
+
+CATATAN KHUSUS:
+- Pastikan RPP sesuai dengan kurikulum yang berlaku (Kurikulum 2013/Kurikulum Merdeka)
+- Sesuaikan dengan kondisi dan karakteristik sekolah serta siswa
+- Pertimbangkan ketersediaan sarana dan prasarana
+- Manfaatkan data karakteristik siswa untuk personalisasi pembelajaran
+- Libatkan orang tua dalam proses pembelajaran (jika memungkinkan)
+- Dokumentasikan proses pembelajaran untuk refleksi dan perbaikan
+- Lakukan evaluasi berkala terhadap efektivitas strategi diferensiasi
+
+Buatkan RPP yang tidak hanya memenuhi standar administratif, tetapi juga praktis, inspiratif, dan mampu menciptakan pembelajaran yang bermakna bagi siswa. Sertakan contoh konkret, dialog pembelajaran, dan skenario yang realistis.
+            `.trim();
+
+            // Display the prompt
+            const outputArea = document.getElementById('outputArea');
+            outputArea.innerHTML = `
+                <div class="animate-fade-in">
+                    <div class="bg-gradient-to-r from-green-100 to-blue-100 border-l-4 border-green-500 p-4 mb-4 rounded">
+                        <div class="flex items-center">
+                            <div class="text-green-500 text-xl mr-2">✅</div>
+                            <div>
+                                <p class="font-semibold text-green-800">Prompt RPP Berhasil Dibuat!</p>
+                                <p class="text-green-700 text-sm">Prompt komprehensif siap digunakan untuk AI Assistant</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm overflow-auto max-h-96 whitespace-pre-wrap">${prompt}</div>
+                </div>
+            `;
+
+            // Enable copy button
+            const copyBtn = document.getElementById('copyBtn');
+            copyBtn.disabled = false;
+            copyBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            copyBtn.onclick = () => copyToClipboard(prompt);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const copyBtn = document.getElementById('copyBtn');
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '✅ Copied!';
+                copyBtn.classList.add('bg-green-700');
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.classList.remove('bg-green-700');
+                }, 2000);
+            }).catch(() => {
+                alert('Gagal menyalin. Silakan copy manual dari area output.');
+            });
+        }
+        
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin menghapus semua data?')) {
+                document.getElementById('rppForm').reset();
+                document.getElementById('outputArea').innerHTML = `
+                    <div class="text-center text-gray-500 py-12">
+                        <div class="text-6xl mb-4">📋</div>
+                        <p class="text-lg">Prompt RPP akan muncul di sini setelah Anda mengisi form dan klik Generate</p>
+                        <p class="text-sm mt-2">Pastikan semua field penting sudah terisi dengan lengkap</p>
+                    </div>
+                `;
+                
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.disabled = true;
+                copyBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95ab7b9ba6daa02d',t:'MTc1MTc2Njk1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<script>
+    // === TEMPEL OBJEK KONFIGURASI ANDA DI SINI ===
+    const firebaseConfig = {
+      apiKey: "AIzaSy...", // Ganti dengan yang Anda salin
+      authDomain: "webapp-316501.firebaseapp.com",
+      databaseURL: "https://webapp-316501-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "webapp-316501",
+      storageBucket: "webapp-316501.appspot.com",
+      messagingSenderId: "739820927694",
+      appId: "1:739820927694:web:c609c05cc240606fe5ae9f"
+    };
+    // ===========================================
+
+    // Inisialisasi Firebase dan buat variabel yang mudah diakses
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    console.log("Firebase berhasil diinisialisasi!"); // Pesan ini akan muncul di konsol browser jika berhasil
+</script>
+<!-- ============================================== -->
+
+<!-- Skrip aplikasi utama Anda (pastikan ini di bawah setup Firebase) -->
+<script src="main.js"></script> <!-- atau nama file JS Anda -->
+
+</body>
+</html>
