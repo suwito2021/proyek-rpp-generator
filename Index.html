@@ -15,13 +15,18 @@
           <li><a href="#" id="menuHome"><i class="fas fa-home"></i> Dasbor</a></li>
           <li><a href="#" id="menuGenerator"><i class="fas fa-pencil-alt"></i> Generator RPP</a></li>
           <li><a href="#" id="menuProfile"><i class="fas fa-user-circle"></i> Profil</a></li>
+          
+          <!-- PERUBAHAN 1: Item menu baru untuk Admin, disembunyikan secara default -->
+          <li id="adminMenuItem" class="hidden">
+            <a href="#" id="menuAdmin"><i class="fas fa-users-cog"></i> Panel Admin</a>
+          </li>
+          
           <li><a href="#" id="menuLogout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
       </div>
 
       <div class="main-content" id="mainContent">
         <div class="header">
-          <!-- Hamburger menu bisa kita sembunyikan jika sidebar hanya muncul setelah login -->
           <button class="hamburger-menu" id="hamburgerMenu" style="display: none;">
             <i class="fas fa-bars"></i>
           </button>
@@ -44,17 +49,13 @@
           <div id="loginForm" class="page-section hidden">
             <h2>Login Pengguna</h2>
             <form id="loginUserForm">
-              <div class="form-group"><label for="loginEmail">Email:</label><input type="email" id="loginEmail" required></div>
+              <!-- PERUBAHAN 2: Label dan tipe input diubah untuk mendukung username admin -->
+              <div class="form-group"><label for="loginEmail">Username / Email:</label><input type="text" id="loginEmail" required></div>
               <div class="form-group"><label for="loginPassword">Password:</label><input type="password" id="loginPassword" required></div>
               <button type="submit" class="btn btn-primary">Login</button>
             </form>
             <p id="loginMessage" class="message"></p>
             <p>Belum punya akun? <a href="#" id="linkToRegister">Daftar di sini</a></p>
-            <!-- Di dalam div#loginForm -->
-            <div class="form-group">
-              <label for="loginEmail">Username / Email:</label> <!-- Ubah label ini -->
-              <input type="email" id="loginEmail" required>
-            </div>
           </div>
 
           <!-- Halaman Register -->
@@ -89,6 +90,11 @@
           <!-- Halaman Generator (Iframe) -->
           <div id="generatorPage" class="page-section hidden">
             <iframe id="generatorFrame" style="width: 100%; height: 80vh; border: none;"></iframe>
+          </div>
+          
+          <!-- PERUBAHAN 3: Area baru untuk halaman admin -->
+          <div id="adminPage" class="page-section hidden">
+            <iframe id="adminFrame" style="width: 100%; height: 80vh; border: none;"></iframe>
           </div>
 
           <!-- Halaman Profil -->
