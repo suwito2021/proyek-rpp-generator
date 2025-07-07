@@ -131,8 +131,62 @@
     if (linkToLogin) linkToLogin.addEventListener('click', (e) => { e.preventDefault(); showPage(loginForm, 'Login Pengguna'); });
     if (linkToRegister) linkToRegister.addEventListener('click', (e) => { e.preventDefault(); showPage(registerForm, 'Daftar Pengguna Baru'); });
 
-    if (loginUserForm) loginUserForm.addEventListener('submit', (e) => { /* ... logika sama ... */ });
-    if (registerUserForm) registerUserForm.addEventListener('submit', (e) => { /* ... logika sama ... */ });
+    if (loginUserForm) {
+  loginUserForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    updateMessage(loginMessage, 'Mencoba login...', 'info');
+
+    google.script.run
+      .withSuccessHandler(response => {
+        if (response.success) {
+          currentUser = response.userData;
+          localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+          sidebar.classList.remove('fully-hidden');
+          updateProfileAndTrialStatus();
+          showPage(dashboardPage, 'Dasbor');
+          loadDashboardData();
+        } else {
+          updateMessage(loginMessage, response.message, 'error');
+        }
+      })
+      .withFailureHandler(error => {
+        updateMessage(loginMessage, 'Terjadi kesalahan: ' + error.message, 'error');
+      })
+      .loginUser(email, password);
+  });
+}
+
+if (registerUserForm) {
+  registerUserForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const userData = {
+      fullName: document.getElementById('registerFullName').value,
+      email: document.getElementById('registerEmail').value,
+      password: document.getElementById('registerPassword').value,
+    };
+    
+    updateMessage(registerMessage, 'Mendaftarkan...', 'info');
+
+    google.script.run
+      .withSuccessHandler(response => {
+        if (response.success) {
+          updateMessage(registerMessage, response.message, 'success');
+          registerUserForm.reset();
+          // Otomatis pindah ke halaman login setelah 3 detik
+          setTimeout(() => showPage(loginForm, 'Login Pengguna'), 3000);
+        } else {
+          updateMessage(registerMessage, response.message, 'error');
+        }
+      })
+      .withFailureHandler(error => {
+        updateMessage(registerMessage, 'Terjadi kesalahan: ' + error.message, 'error');
+      })
+      .registerUser(userData);
+  });
+}
     
     // Menu Sidebar
     if (menuHome) menuHome.addEventListener('click', (e) => { e.preventDefault(); if(currentUser) { showPage(dashboardPage, 'Dasbor'); loadDashboardData(); } });
