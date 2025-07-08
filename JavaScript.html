@@ -176,7 +176,7 @@
       if (!currentUser) return;
       
       if (!currentUser.isAdmin && currentUser.subscriptionStatus === 'Trial' && currentUser.trialClicks >= MAX_CLICKS_FROM_SERVER) {
-        alert('Masa trial Anda telah habis. Silakan hubungi admin untuk upgrade.');
+        showNotification('Akses Ditolak', 'Masa trial Anda telah habis. Silakan hubungi admin untuk upgrade.', 'error');
         showPage(profilePage, 'Profil Pengguna');
         return;
       }
@@ -189,7 +189,7 @@
                 updateProfileAndTrialStatus();
                 loadGeneratorPage();
             } else { 
-                alert(trialResponse.message); 
+                 showNotification('Gagal', trialResponse.message, 'error');
             }
         }).recordTrialClick(currentUser.id);
       } else {
