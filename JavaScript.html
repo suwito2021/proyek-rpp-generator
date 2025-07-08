@@ -11,7 +11,6 @@
     const dashboardPage = document.getElementById('dashboardPage');
     const generatorPage = document.getElementById('generatorPage');
     const profilePage = document.getElementById('profilePage');
-    // MODIFIKASI: Elemen baru untuk Halaman Admin
     const adminPage = document.getElementById('adminPage');
 
     // --- TOMBOL & LINK ---
@@ -24,12 +23,11 @@
     const menuProfile = document.getElementById('menuProfile');
     const menuLogout = document.getElementById('menuLogout');
     const goToGeneratorBtn = document.getElementById('goToGeneratorBtn');
-    // MODIFIKASI: Elemen menu dan frame admin
     const adminMenuItem = document.getElementById('adminMenuItem');
     const menuAdmin = document.getElementById('menuAdmin');
-    const adminFrame = document.getElementById('adminFrame');
     
-    // --- FORM & OUTPUT ---
+    // --- FRAME & OUTPUT ---
+    const adminFrame = document.getElementById('adminFrame');
     const loginUserForm = document.getElementById('loginUserForm');
     const registerUserForm = document.getElementById('registerUserForm');
     const dashboardWelcomeMessage = document.getElementById('dashboardWelcomeMessage');
@@ -40,10 +38,10 @@
 
     // --- DATA ---
     let currentUser = null;
+    // URL Web App Anda yang sudah benar
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbyTeTKtEAidA6L-TNBRYbeOHF9GPDuEcS-zY6WmRGUInE7-XgXQuYsaI4qE1NnwS0Ei/exec";
 
     // --- FUNGSI-FUNGSI HELPER ---
-
-    // MODIFIKASI: Menambahkan adminPage ke daftar halaman
     function showPage(pageElement, title) {
       const allPages = [welcomePage, loginForm, registerForm, dashboardPage, generatorPage, profilePage, adminPage];
       allPages.forEach(page => { if(page) page.classList.add('hidden'); });
@@ -64,7 +62,6 @@
     function updateProfileAndTrialStatus() {
         if (!currentUser || !profileTrialStatus) return;
         
-        // Menampilkan nama dan email di halaman profil
         document.getElementById('profileFullName').textContent = currentUser.fullName;
         document.getElementById('profileEmail').textContent = currentUser.email;
         document.getElementById('profileSubscriptionStatus').textContent = currentUser.subscriptionStatus;
@@ -89,11 +86,10 @@
           localStorage.setItem('loggedInUser', JSON.stringify(currentUser));
           sidebar.classList.remove('fully-hidden');
           
-          // MODIFIKASI: Tampilkan menu admin jika user adalah admin
           if (currentUser.isAdmin) {
               adminMenuItem.classList.remove('hidden');
           } else {
-              adminMenuItem.classList.add('hidden'); // Sembunyikan jika bukan admin
+              adminMenuItem.classList.add('hidden');
           }
 
           updateProfileAndTrialStatus();
@@ -106,10 +102,10 @@
 
     // --- FUNGSI UTAMA ---
     function loadDashboardData() {
-        if (!currentUser || currentUser.isAdmin) {
-            if(currentUser.isAdmin) dashboardWelcomeMessage.textContent = `Selamat datang, Administrator!`;
-            // Admin tidak perlu melihat statistik (atau bisa dibuatkan statistik khusus)
-            // Untuk saat ini, kita kosongkan saja
+        if (!currentUser) return;
+        
+        if (currentUser.isAdmin) {
+            dashboardWelcomeMessage.textContent = `Selamat datang, Administrator!`;
             document.getElementById('stat-visitors-today').textContent = 'N/A';
             document.getElementById('stat-rpp-today').textContent = 'N/A';
             document.getElementById('stat-signups-today').textContent = 'N/A';
@@ -128,23 +124,19 @@
                     document.getElementById('stat-trial-users').textContent = stats.trialUsers;
                 }
             })
-            .withFailureHandler(error => {
-                console.error("Gagal memanggil getDashboardStats:", error);
-            })
+            .withFailureHandler(error => console.error("Gagal memanggil getDashboardStats:", error))
             .getDashboardStats();
     }
 
     function openGenerator() {
       if (!currentUser) return;
       
-      // Admin punya akses tak terbatas, jadi lewati pengecekan trial
       if (!currentUser.isAdmin && currentUser.subscriptionStatus === 'Trial' && currentUser.trialClicks >= MAX_CLICKS_FROM_SERVER) {
         alert('Masa trial Anda telah habis. Silakan hubungi admin untuk upgrade.');
         showPage(profilePage, 'Profil Pengguna');
         return;
       }
       
-      // Hanya catat klik untuk non-admin
       if (!currentUser.isAdmin) {
         google.script.run.withSuccessHandler((trialResponse) => {
             if (trialResponse.success) {
@@ -157,14 +149,11 @@
             }
         }).recordTrialClick(currentUser.id);
       } else {
-        // Admin langsung buka tanpa mencatat klik
         loadGeneratorPage();
       }
     }
 
     function loadGeneratorPage() {
-        // PENTING: Ganti placeholder di bawah dengan URL Web App Anda
-        const webAppUrl = "https://script.google.com/macros/s/AKfycbyTeTKtEAidA6L-TNBRYbeOHF9GPDuEcS-zY6WmRGUInE7-XgXQuYsaI4qE1NnwS0Ei/exec";
         generatorFrame.src = webAppUrl + "?page=generator";
         showPage(generatorPage, 'Generator RPP'); 
     }
@@ -180,9 +169,10 @@
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
         updateMessage(loginMessage, 'Mencoba login...', 'info');
-        google.script.run.withSuccessHandler(handleLoginSuccess).withFailureHandler(error => {
-            updateMessage(loginMessage, 'Terjadi kesalahan: ' + error.message, 'error');
-        }).loginUser(email, password);
+        google.script.run
+            .withSuccessHandler(handleLoginSuccess)
+            .withFailureHandler(error => updateMessage(loginMessage, 'Terjadi kesalahan: ' + error.message, 'error'))
+            .loginUser(email, password);
     });
 
     if (registerUserForm) registerUserForm.addEventListener('submit', (e) => {
@@ -201,9 +191,8 @@
             } else {
                 updateMessage(registerMessage, response.message, 'error');
             }
-        }).withFailureHandler(error => {
-            updateMessage(registerMessage, 'Terjadi kesalahan: ' + error.message, 'error');
-        }).registerUser(userData);
+        }).withFailureHandler(error => updateMessage(registerMessage, 'Terjadi kesalahan: ' + error.message, 'error'))
+        .registerUser(userData);
     });
     
     // Menu Sidebar
@@ -212,12 +201,9 @@
     if (goToGeneratorBtn) goToGeneratorBtn.addEventListener('click', openGenerator);
     if (menuProfile) menuProfile.addEventListener('click', (e) => { e.preventDefault(); if(currentUser) { updateProfileAndTrialStatus(); showPage(profilePage, 'Profil Pengguna'); } });
     
-    // MODIFIKASI: Event listener untuk menu admin
     if (menuAdmin) menuAdmin.addEventListener('click', (e) => {
         e.preventDefault();
         if (currentUser && currentUser.isAdmin) {
-            // PENTING: Ganti placeholder di bawah dengan URL Web App Anda
-            const webAppUrl = "https://script.google.com/macros/s/AKfycbycwmIiyc9JOeBCBTLiad7DZ2WgsjbvpMKqrVB-7ST050O98vj9jzHOWd_ZwropH2_YQ/exec";
             adminFrame.src = webAppUrl + "?page=admin";
             showPage(adminPage, 'Panel Admin');
         }
@@ -228,7 +214,7 @@
         currentUser = null;
         localStorage.removeItem('loggedInUser');
         sidebar.classList.add('fully-hidden');
-        adminMenuItem.classList.add('hidden'); // Sembunyikan menu admin saat logout
+        adminMenuItem.classList.add('hidden');
         showPage(welcomePage, 'Selamat Datang');
     });
 
@@ -236,7 +222,6 @@
     const storedUser = localStorage.getItem('loggedInUser');
     if (storedUser) {
       currentUser = JSON.parse(storedUser);
-      // Panggil fungsi yang menangani logika setelah login
       handleLoginSuccess({ success: true, userData: currentUser });
     } else {
       sidebar.classList.add('fully-hidden');
